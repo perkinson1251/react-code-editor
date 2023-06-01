@@ -5,11 +5,11 @@ import { Editor } from "@monaco-editor/react";
 interface Props {
     onChange: (action: string, data: string) => void;
     theme: any;
-    laungage: string;
+    language: string;
     code: string;
 }
 
-const CodeWindow = ({ onChange, theme, laungage, code }: Props) => {
+const CodeWindow = ({ onChange, theme, language, code }: Props) => {
     const [value, setValue] = useState<string>(code || "");
 
     const handleEditorChange = (value: any) => {
@@ -22,7 +22,7 @@ const CodeWindow = ({ onChange, theme, laungage, code }: Props) => {
             <Editor
                 height="85vh"
                 width="100%"
-                language={laungage || "javascript"}
+                language={language || "javascript"}
                 value={value}
                 theme={theme}
                 defaultValue="// Hello world! Go on!"
