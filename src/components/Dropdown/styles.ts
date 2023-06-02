@@ -9,8 +9,9 @@ export const DropdownButton = styled.button<{ isOpen: boolean }>`
     padding: 0.6rem;
     background-color: transparent;
     border: 0;
-    border-radius: 4px;
+    border-radius: 0.4rem;
     cursor: pointer;
+    font-size: 1.3rem;
     color: #ffffff;
 
     transition: 0.3s;
@@ -29,22 +30,27 @@ export const DropdownList = styled.ul`
     top: 100%;
     left: 0;
     width: 100%;
-    padding: 0;
-    margin: 4px 0;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    padding: 0.4rem;
+    background-color: #212121;
+    border-radius: 0.4rem;
     list-style-type: none;
     z-index: 1;
-    max-height: 200px;
+    max-height: 20rem;
+    min-width: 25rem;
+    width: 100%;
     overflow-y: auto;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 `;
 
 export const DropdownItem = styled.li`
-    padding: 8px 12px;
+    font-size: 1.3rem;
+    color: #fff;
+    padding: 0.8rem 1.2rem;
     cursor: pointer;
+    border-radius: 0.4rem;
 
     &:hover {
-        background-color: #f0f0f0;
+        color: #47c7c1;
+        background-color: #101010;
     }
 `;

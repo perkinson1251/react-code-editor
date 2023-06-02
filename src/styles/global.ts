@@ -11,4 +11,8 @@ export default createGlobalStyle`
         box-sizing: border-box;
         border: 0;
     }
+
+    body {
+        font-family: sans-serif;
+    }
 `;
