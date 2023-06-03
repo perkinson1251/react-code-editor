@@ -1,9 +1,12 @@
 import axios from "axios";
+import { toast } from "react-toastify";
+
+import logger from "core/utils/logs";
 
 interface PayloadProps {
     language_id: number;
-    source_code: any;
-    stdin: any;
+    source_code: string;
+    stdin: string;
 }
 
 const API = axios.create({
@@ -19,10 +22,14 @@ API.interceptors.response.use(
             error.response.status < 500;
         const errorTooManyRequests = error.response.status === 429;
         if (errorTooManyRequests) {
-            console.error("Response error! Too many requests. Error: ", error);
+            toast.error(
+                `Quota of 100 requests exceeded for the Day! Please read the blog on freeCodeCamp to learn how to setup your own RAPID API Judge0!`
+            );
+            logger("Response error! Too many requests. Error:", "error", error);
         }
-        if (!expectedError && process.env.NODE_ENV === "development") {
-            console.error("Reesponse error! Code: ", error);
+        if (!expectedError) {
+            toast("Something had happened");
+            logger("Response error! Code: ", "error", error);
         }
         return Promise.reject(error);
     }
@@ -30,30 +37,32 @@ API.interceptors.response.use(
 
 const httpService = {
     compile: async (payload: PayloadProps) => {
-        const { data } = await API.request({
-            method: "POST",
-            url: process.env.REACT_APP_RAPID_API_URL,
-            params: { base64_encoded: "true", fields: "*" },
+        const res = await API.post("/submissions", payload, {
+            params: {
+                base64_encoded: "true",
+                fields: "*",
+            },
+            headers: {
+                "content-type": "application/json",
+                "Content-Type": "application/json",
+                "X-RapidAPI-Key": process.env.REACT_APP_RAPID_API_KEY,
+                "X-RapidAPI-Host": process.env.REACT_APP_RAPID_API_HOST,
+            },
+        });
+        return res;
+    },
+    checkStatus: async (token: string) => {
+        const res = await API.get(`/submissions/${token}`, {
+            params: {
+                base64_encoded: "true",
+                fields: "*",
+            },
             headers: {
                 "Content-Type": "application/json",
-                "X-RapidAPI-Host": process.env.REACT_APP_RAPID_API_HOST,
-                "X-RapidAPI-Key": process.env.REACT_APP_RAPID_API_KEY,
-            },
-            data: payload,
-        });
-        return data;
-    },
-    checkStatus: async (token: any) => {
-        const { data } = await API.request({
-            method: "GET",
-            url: process.env.REACT_APP_RAPID_API_URL + "/" + token,
-            params: { base64_encoded: "true", fields: "*" },
-            headers: {
-                "X-RapidAPI-Host": process.env.REACT_APP_RAPID_API_HOST,
                 "X-RapidAPI-Key": process.env.REACT_APP_RAPID_API_KEY,
             },
         });
-        return data;
+        return res;
     },
 };
 

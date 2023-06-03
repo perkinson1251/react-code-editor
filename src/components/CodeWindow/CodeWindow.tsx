@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import { Editor } from "@monaco-editor/react";
 
@@ -18,17 +18,15 @@ const CodeWindow = ({ onChange, theme, language, code }: Props) => {
     };
 
     return (
-        <div>
-            <Editor
-                height="85vh"
-                width="100%"
-                language={language || "javascript"}
-                value={value}
-                theme={theme}
-                defaultValue="// Hello world! Go on!"
-                onChange={handleEditorChange}
-            ></Editor>
-        </div>
+        <Editor
+            height="85vh"
+            width="100%"
+            language={language || "javascript"}
+            value={value}
+            theme={theme}
+            defaultValue="// Hello world! Go on!"
+            onChange={handleEditorChange}
+        ></Editor>
     );
 };
 

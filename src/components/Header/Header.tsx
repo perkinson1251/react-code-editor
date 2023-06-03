@@ -1,23 +1,13 @@
-import Dropdown from "components/Dropdown/Dropdown";
+import { ReactNode } from "react";
+
 import * as S from "./styles";
 
-import { languageOptions } from "core/configs/languageOptions";
-import { IDropdownOption } from "core/types";
+interface Props {
+    children: ReactNode;
+}
 
-const Header = () => {
-    const handleChange = (option: IDropdownOption | null) => {
-        console.log("change", option);
-    };
-
-    return (
-        <S.StyledHeader>
-            <Dropdown
-                onChange={handleChange}
-                options={languageOptions}
-                placeholder="Select language"
-            />
-        </S.StyledHeader>
-    );
+const Header = ({ children }: Props) => {
+    return <S.StyledHeader>{children}</S.StyledHeader>;
 };
 
 export default Header;

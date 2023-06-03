@@ -19,11 +19,14 @@ const Dropdown = ({ placeholder, options, onChange }: Props) => {
         setIsOpen((prevIsOpen) => !prevIsOpen);
     }, []);
 
-    const handleOptionSelect = useCallback((option: Option) => {
-        setSelectedOption(option);
-        setIsOpen(false);
-        onChange(option);
-    }, []);
+    const handleOptionSelect = useCallback(
+        (option: Option) => {
+            setSelectedOption(option);
+            setIsOpen(false);
+            onChange(option);
+        },
+        [onChange]
+    );
 
     const handleClickOutside = useCallback((event: MouseEvent) => {
         if (

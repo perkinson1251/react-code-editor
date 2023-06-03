@@ -1,43 +1,44 @@
 import { useState, useEffect } from "react";
-import { toast } from "react-toastify";
 
 import useKeyPress from "core/hooks/useKeyPress";
 import { languageOptions } from "core/configs/languageOptions";
 
 import CodeWindow from "components/CodeWindow/CodeWindow";
-import httpService from "core/services/http.service";
 import Header from "components/Header/Header";
+import Dropdown from "components/Dropdown/Dropdown";
 
-const javascriptDefault = `
-    // Hello world!
-`;
+import { IDropdownOption } from "core/types";
+import httpService from "core/services/http.service";
+import logger from "core/utils/logs";
+
+const javascriptDefault = `// Hello world!`;
 
 const MainPage = () => {
     const [code, setCode] = useState<string>(javascriptDefault);
     const [customInput, setCustomInput] = useState<string>("");
-    const [outputDetails, setOutputDetails] = useState(null);
+    const [outputDetails, setOutputDetails] = useState<any>(null);
     const [processing, setProcessing] = useState<boolean>(false);
     const [theme, setTheme] = useState<string>("vs-dark");
-    const [language, setLanguage] = useState(languageOptions[0]);
+    const [language, setLanguage] = useState<IDropdownOption>(
+        languageOptions[0]
+    );
 
     const enterPress = useKeyPress("Enter");
     const ctrlPress = useKeyPress("Control");
 
-    // Checking keys status
     useEffect(() => {
         if (enterPress && ctrlPress) {
-            if (process.env.NODE_ENV === "development") {
-                console.log("Enter pressed", enterPress);
-                console.log("Control pressed", ctrlPress);
-            }
+            logger("Enter pressed", "info", enterPress);
+            logger("Control pressed", "info", ctrlPress);
+
             // handleCompile();
         }
     }, [enterPress, ctrlPress]);
 
-    const handleSelectChange = (el: any) => {
-        if (process.env.NODE_ENV === "development")
-            console.log("Selected option: ", el);
-        setLanguage(el);
+    const handleSelectChange = (option: IDropdownOption | null) => {
+        logger("Option changed. ", "info", option);
+        // @ts-ignore
+        setLanguage(option);
     };
 
     const handleChange = (action: string, data: string) => {
@@ -46,12 +47,12 @@ const MainPage = () => {
                 setCode(data);
                 break;
             default:
-                if (process.env.NODE_ENV === "development")
-                    console.warn(
-                        "onChange case not founded! Check this out",
-                        action,
-                        data
-                    );
+                logger(
+                    "onChange case not founded! Check this out",
+                    "warning",
+                    action,
+                    data
+                );
                 break;
         }
     };
@@ -66,14 +67,14 @@ const MainPage = () => {
         // TODO: Fix this
         // @ts-ignore
         const response = await httpService.compile(formData);
-        const token = response.token;
+        const token = response.data.token;
         checkStatus(token);
     };
 
-    const checkStatus = async (token: any) => {
+    const checkStatus = async (token: string) => {
         try {
             const response = await httpService.checkStatus(token);
-            const statusId = response.status?.id;
+            const statusId = response.data.status?.id;
             if (statusId === 1 || statusId === 2) {
                 setTimeout(() => {
                     checkStatus(token);
@@ -82,18 +83,24 @@ const MainPage = () => {
             } else {
                 setProcessing(false);
                 setOutputDetails(response);
-                console.log("checkStatus res.data", response);
+                logger("checkStatus res.data", "info", response);
                 return;
             }
         } catch (error) {
-            console.log("checkStatusError", error);
+            logger("checkStatusError", "error", error);
             setProcessing(false);
         }
     };
 
     return (
         <>
-            <Header></Header>
+            <Header>
+                <Dropdown
+                    onChange={handleSelectChange}
+                    options={languageOptions}
+                    placeholder="Select language"
+                />
+            </Header>
             <CodeWindow
                 code={code}
                 onChange={handleChange}
