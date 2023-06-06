@@ -1,4 +1,6 @@
 import { useMemo } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { IOutputResult } from "core/types";
 
@@ -13,13 +15,33 @@ const OutputWindow = ({ outputDetails }: Props) => {
         if (!outputDetails) return null;
 
         const { status, stdout, stderr, time, memory } = outputDetails;
-        const statusDesc = status?.description;
+        const statusDescription = status?.description;
 
         let output = "";
-        if (statusDesc === "Accepted") output = (stdout || "") + (stderr || "");
-        else if (statusDesc === "In Queue" || statusDesc === "Processing")
-            output = "Processing...";
-        else output = stderr || btoa("Unknown error");
+        switch (statusDescription) {
+            case "Accepted":
+                output = stdout ?? stderr ?? "";
+                break;
+            case "In Queue":
+            case "Processing":
+                output = "Processing...";
+                break;
+            case "Compilation Error":
+                output = stderr || btoa("Compilation Error");
+                toast.error("Compilation Error");
+                break;
+            case "Runtime Error":
+                output = stderr || btoa("Runtime Error");
+                toast.error("Runtime Error");
+                break;
+            case "Internal Error":
+                output = stderr || btoa("Internal Error");
+                toast.error("Internal Error");
+                break;
+            default:
+                output = stderr || btoa("Unknown error");
+                break;
+        }
 
         const decodedOutput = atob(output);
         const statistics =

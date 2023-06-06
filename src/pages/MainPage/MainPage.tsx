@@ -1,15 +1,14 @@
 import { useState, useEffect } from "react";
 
+import { IDropdownOption } from "core/types";
+import httpService from "core/services/http.service";
+import logger from "core/utils/logs";
 import useKeyPress from "core/hooks/useKeyPress";
 import { languageOptions } from "core/configs/languageOptions";
 
 import CodeWindow from "components/CodeWindow/CodeWindow";
 import Header from "components/Header/Header";
 import Dropdown from "components/Dropdown/Dropdown";
-
-import { IDropdownOption } from "core/types";
-import httpService from "core/services/http.service";
-import logger from "core/utils/logs";
 import OutputWindow from "components/OutputWindow/OutputWindow";
 
 const javascriptDefault = `// Hello world!`;
