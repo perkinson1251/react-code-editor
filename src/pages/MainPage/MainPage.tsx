@@ -10,6 +10,7 @@ import Dropdown from "components/Dropdown/Dropdown";
 import { IDropdownOption } from "core/types";
 import httpService from "core/services/http.service";
 import logger from "core/utils/logs";
+import OutputWindow from "components/OutputWindow/OutputWindow";
 
 const javascriptDefault = `// Hello world!`;
 
@@ -30,8 +31,7 @@ const MainPage = () => {
         if (enterPress && ctrlPress) {
             logger("Enter pressed", "info", enterPress);
             logger("Control pressed", "info", ctrlPress);
-
-            // handleCompile();
+            handleCompile();
         }
     }, [enterPress, ctrlPress]);
 
@@ -62,7 +62,7 @@ const MainPage = () => {
         const formData = {
             language_id: language.id,
             source_code: btoa(code),
-            stdin: btoa(customInput),
+            stdin: btoa("Judge0"),
         };
         // TODO: Fix this
         // @ts-ignore
@@ -82,7 +82,7 @@ const MainPage = () => {
                 return;
             } else {
                 setProcessing(false);
-                setOutputDetails(response);
+                setOutputDetails(response.data);
                 logger("checkStatus res.data", "info", response);
                 return;
             }
@@ -98,7 +98,7 @@ const MainPage = () => {
                 <Dropdown
                     onChange={handleSelectChange}
                     options={languageOptions}
-                    placeholder="Select language"
+                    placeholder={language.name}
                 />
             </Header>
             <CodeWindow
@@ -110,6 +110,7 @@ const MainPage = () => {
             <button onClick={handleCompile} disabled={!code}>
                 {processing ? "Processing..." : "Compile and Execute"}
             </button>
+            <OutputWindow outputDetails={outputDetails}></OutputWindow>
         </>
     );
 };
