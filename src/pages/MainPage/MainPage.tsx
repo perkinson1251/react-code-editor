@@ -6,6 +6,7 @@ import logger from "core/utils/logs";
 import useKeyPress from "core/hooks/useKeyPress";
 import { languageOptions } from "core/configs/languageOptions";
 
+import Button from "components/Button/Button";
 import CodeWindow from "components/CodeWindow/CodeWindow";
 import Header from "components/Header/Header";
 import Dropdown from "components/Dropdown/Dropdown";
@@ -15,7 +16,7 @@ const javascriptDefault = `// Hello world!`;
 
 const MainPage = () => {
     const [code, setCode] = useState<string>(javascriptDefault);
-    const [customInput, setCustomInput] = useState<string>("");
+    // const [customInput, setCustomInput] = useState<string>("");
     const [outputDetails, setOutputDetails] = useState<any>(null);
     const [processing, setProcessing] = useState<boolean>(false);
     const [theme, setTheme] = useState<string>("vs-dark");
@@ -99,6 +100,9 @@ const MainPage = () => {
                     options={languageOptions}
                     placeholder={language.name}
                 />
+                <Button onClick={handleCompile} disabled={!code}>
+                    {processing ? "Processing..." : "Compile and Execute"}
+                </Button>
             </Header>
             <CodeWindow
                 code={code}
@@ -106,9 +110,6 @@ const MainPage = () => {
                 language={language?.value}
                 theme={theme}
             />
-            <button onClick={handleCompile} disabled={!code}>
-                {processing ? "Processing..." : "Compile and Execute"}
-            </button>
             <OutputWindow outputDetails={outputDetails}></OutputWindow>
         </>
     );

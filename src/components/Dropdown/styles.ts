@@ -6,22 +6,23 @@ export const DropdownWrapper = styled.div`
 `;
 
 export const DropdownButton = styled.button<{ isOpen: boolean }>`
-    padding: 0.6rem;
+    padding: 1.2rem;
     background-color: transparent;
     border: 0;
     border-radius: 0.4rem;
     cursor: pointer;
-    font-size: 1.3rem;
-    color: #ffffff;
+    font-weight: 500;
+    font-size: 1.6rem;
+    line-height: 1.4rem;
 
     transition: 0.3s;
 
-    background-color: ${({ isOpen }) => (isOpen ? "#101010" : "transperent")};
-    color: ${({ isOpen }) => (isOpen ? "#47c7c1" : "#FFFFFF")};
+    background-color: ${({ isOpen }) => (isOpen ? "#2e3139" : "transperent")};
+    color: ${({ isOpen }) => (isOpen ? "#FFFFFF" : "#c4cbda")};
 
     &:hover {
-        color: #47c7c1;
-        background-color: #101010;
+        color: #ffffff;
+        background-color: #2e3139;
     }
 `;
 
@@ -31,7 +32,7 @@ export const DropdownList = styled.ul`
     left: 0;
     width: 100%;
     padding: 0.4rem;
-    background-color: #212121;
+    background-color: #2e3139;
     border-radius: 0.4rem;
     list-style-type: none;
     z-index: 1;
@@ -50,7 +51,7 @@ export const DropdownItem = styled.li`
     border-radius: 0.4rem;
 
     &:hover {
-        color: #47c7c1;
-        background-color: #101010;
+        color: #c4cbda;
+        background-color: #1f2228;
     }
 `;

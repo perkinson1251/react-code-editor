@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useState, useMemo } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -11,8 +11,15 @@ interface Props {
 }
 
 const OutputWindow = ({ outputDetails }: Props) => {
+    const [activeTab, setActiveTab] = useState<string>("output");
+
+    const handleTabChange = (tab: string): void => {
+        setActiveTab(tab);
+    };
+
     const getOutput = useMemo(() => {
-        if (!outputDetails) return null;
+        if (!outputDetails)
+            return "(c) Monaco Editor base. All rights reserved. Here you will see the output";
 
         const { status, stdout, stderr, time, memory } = outputDetails;
         const statusDescription = status?.description;
@@ -49,18 +56,37 @@ const OutputWindow = ({ outputDetails }: Props) => {
 
         return (
             <>
-                <p>{decodedOutput}</p>
-                <p>{statistics}</p>
+                <pre>{decodedOutput}</pre>
+                <pre>{statistics}</pre>
             </>
         );
     }, [outputDetails]);
 
     return (
+        // <>
+        //     <h1>Output:</h1>
+        //     <S.OutputWindowContainer>
+        //         <S.OutputWindowOutput>{getOutput}</S.OutputWindowOutput>
+        //     </S.OutputWindowContainer>
+        // </>
         <>
-            <h1>Output:</h1>
-            <S.OutputWindowContainer>
-                <S.OutputWindowOutput>{getOutput}</S.OutputWindowOutput>
-            </S.OutputWindowContainer>
+            <S.TerminalContainer>
+                <S.TabContainer>
+                    <S.Tab
+                        active={activeTab === "output"}
+                        onClick={() => handleTabChange("output")}
+                    >
+                        Output
+                    </S.Tab>
+                    <S.Tab
+                        active={activeTab === "input"}
+                        onClick={() => handleTabChange("input")}
+                    >
+                        Input
+                    </S.Tab>
+                </S.TabContainer>
+                <S.ContentContainer>{getOutput}</S.ContentContainer>
+            </S.TerminalContainer>
         </>
     );
 };

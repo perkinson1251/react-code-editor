@@ -13,6 +13,6 @@ export default createGlobalStyle`
     }
 
     body {
-        font-family: sans-serif;
+        font-family: "Poppins", sans-serif;
     }
 `;
