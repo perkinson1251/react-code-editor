@@ -12,20 +12,20 @@ interface Props {
 const CodeWindow = ({ onChange, theme, language, code }: Props) => {
     const [value, setValue] = useState<string>(code || "");
 
-    const handleEditorChange = (value: any) => {
+    const handleEditorChange = (value: string) => {
         setValue(value);
         onChange("code", value);
     };
 
     return (
         <Editor
-            height="85vh"
+            height="100%"
             width="100%"
             language={language || "javascript"}
             value={value}
             theme={theme}
             defaultValue="// Hello world! Go on!"
-            onChange={handleEditorChange}
+            onChange={() => handleEditorChange(value)}
         ></Editor>
     );
 };

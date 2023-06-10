@@ -19,7 +19,7 @@ const OutputWindow = ({ outputDetails }: Props) => {
 
     const getOutput = useMemo(() => {
         if (!outputDetails)
-            return "(c) Monaco Editor base. All rights reserved. Here you will see the output";
+            return "(c) Monaco Editor. All rights reserved. Here you will see the output";
 
         const { status, stdout, stderr, time, memory } = outputDetails;
         const statusDescription = status?.description;
@@ -63,31 +63,23 @@ const OutputWindow = ({ outputDetails }: Props) => {
     }, [outputDetails]);
 
     return (
-        // <>
-        //     <h1>Output:</h1>
-        //     <S.OutputWindowContainer>
-        //         <S.OutputWindowOutput>{getOutput}</S.OutputWindowOutput>
-        //     </S.OutputWindowContainer>
-        // </>
-        <>
-            <S.TerminalContainer>
-                <S.TabContainer>
-                    <S.Tab
-                        active={activeTab === "output"}
-                        onClick={() => handleTabChange("output")}
-                    >
-                        Output
-                    </S.Tab>
-                    <S.Tab
-                        active={activeTab === "input"}
-                        onClick={() => handleTabChange("input")}
-                    >
-                        Input
-                    </S.Tab>
-                </S.TabContainer>
-                <S.ContentContainer>{getOutput}</S.ContentContainer>
-            </S.TerminalContainer>
-        </>
+        <S.TerminalContainer>
+            <S.TabContainer>
+                <S.Tab
+                    active={activeTab === "output"}
+                    onClick={() => handleTabChange("output")}
+                >
+                    Output
+                </S.Tab>
+                <S.Tab
+                    active={activeTab === "input"}
+                    onClick={() => handleTabChange("input")}
+                >
+                    Input
+                </S.Tab>
+            </S.TabContainer>
+            <S.ContentContainer>{getOutput}</S.ContentContainer>
+        </S.TerminalContainer>
     );
 };
 

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 
-import { IDropdownOption } from "core/types";
+import * as S from "./styles";
+
+import { IDropdownOption, IOutputResult } from "core/types";
 import httpService from "core/services/http.service";
 import logger from "core/utils/logs";
 import useKeyPress from "core/hooks/useKeyPress";
@@ -12,12 +14,12 @@ import Header from "components/Header/Header";
 import Dropdown from "components/Dropdown/Dropdown";
 import OutputWindow from "components/OutputWindow/OutputWindow";
 
-const javascriptDefault = `// Hello world!`;
-
 const MainPage = () => {
-    const [code, setCode] = useState<string>(javascriptDefault);
+    const [code, setCode] = useState<string>("");
     // const [customInput, setCustomInput] = useState<string>("");
-    const [outputDetails, setOutputDetails] = useState<any>(null);
+    const [outputDetails, setOutputDetails] = useState<IOutputResult | null>(
+        null
+    );
     const [processing, setProcessing] = useState<boolean>(false);
     const [theme, setTheme] = useState<string>("vs-dark");
     const [language, setLanguage] = useState<IDropdownOption>(
@@ -93,7 +95,7 @@ const MainPage = () => {
     };
 
     return (
-        <>
+        <S.StyledMainPage>
             <Header>
                 <Dropdown
                     onChange={handleSelectChange}
@@ -104,14 +106,18 @@ const MainPage = () => {
                     {processing ? "Processing..." : "Compile and Execute"}
                 </Button>
             </Header>
-            <CodeWindow
-                code={code}
-                onChange={handleChange}
-                language={language?.value}
-                theme={theme}
-            />
-            <OutputWindow outputDetails={outputDetails}></OutputWindow>
-        </>
+            <S.MainPageCode>
+                <CodeWindow
+                    code={code}
+                    onChange={handleChange}
+                    language={language?.value}
+                    theme={theme}
+                />
+            </S.MainPageCode>
+            <S.MainPageOutput>
+                <OutputWindow outputDetails={outputDetails}></OutputWindow>
+            </S.MainPageOutput>
+        </S.StyledMainPage>
     );
 };
 
