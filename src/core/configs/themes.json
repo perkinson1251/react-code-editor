@@ -1,0 +1,16 @@
+[
+    {
+        "id": 1,
+        "name": "Light",
+        "value": "light",
+        "background": "#FFFFFF",
+        "text": "#000000"
+    },
+    {
+        "id": 2,
+        "name": "VS Dark",
+        "value": "vs-dark",
+        "background": "#1E1E1E",
+        "text": "#FFFFFF"
+    }
+]

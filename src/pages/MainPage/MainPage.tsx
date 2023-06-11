@@ -2,9 +2,12 @@ import { useState, useEffect } from "react";
 
 import * as S from "./styles";
 
+import { ReactComponent as Logo } from "assets/Logo.svg";
+
 import { IDropdownOption, IOutputResult } from "core/types";
 import httpService from "core/services/http.service";
 import logger from "core/utils/logs";
+import getThemeOptions, { getThemeName } from "core/utils/theme";
 import useKeyPress from "core/hooks/useKeyPress";
 import { languageOptions } from "core/configs/languageOptions";
 
@@ -37,10 +40,18 @@ const MainPage = () => {
         }
     }, [enterPress, ctrlPress]);
 
-    const handleSelectChange = (option: IDropdownOption | null) => {
+    const handleLanguageChange = (option: IDropdownOption | null) => {
         logger("Option changed. ", "info", option);
         // @ts-ignore
         setLanguage(option);
+    };
+
+    const handleThemeChange = (selectedOption: IDropdownOption | null) => {
+        if (selectedOption) {
+            setTheme(selectedOption.value);
+            // Сохранение выбранной темы в хранилище или других источниках данных
+            //   localStorage.setItem("selectedTheme", selectedOption.value);
+        }
     };
 
     const handleChange = (action: string, data: string) => {
@@ -97,10 +108,16 @@ const MainPage = () => {
     return (
         <S.StyledMainPage>
             <Header>
+                <Logo />
                 <Dropdown
-                    onChange={handleSelectChange}
+                    onChange={handleLanguageChange}
                     options={languageOptions}
                     placeholder={language.name}
+                />
+                <Dropdown
+                    onChange={handleThemeChange}
+                    options={getThemeOptions()}
+                    placeholder={getThemeName(theme) || ""}
                 />
                 <Button onClick={handleCompile} disabled={!code}>
                     {processing ? "Processing..." : "Compile and Execute"}
